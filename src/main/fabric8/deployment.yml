@@ -1,0 +1,23 @@
+spec:
+  template:
+    spec:
+      serviceAccountName: camel-springboot-audit-sa
+      containers:
+      - name: camel-springboot-audit
+        imagePullPolicy: Always
+        env:
+        - name: SPRING_CONFIG_LOCATION
+          value: file:/etc/config/
+        resources:
+          requests:
+            cpu: "1.0"
+          limits:
+            cpu: "4.0"
+        volumeMounts:
+        - name: camel-springboot-audit-configmap-vol
+          mountPath: /etc/config
+          readOnly: true
+      volumes:
+      - name: camel-springboot-audit-configmap-vol
+        configMap:
+          name: camel-springboot-audit-configmap

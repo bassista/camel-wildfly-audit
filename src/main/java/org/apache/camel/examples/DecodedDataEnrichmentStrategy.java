@@ -13,13 +13,15 @@
  */
 package org.apache.camel.examples;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.apache.camel.Exchange;
+import org.apache.camel.processor.aggregate.AggregationStrategy;
 
-@SpringBootApplication
-public class Application {
+public class DecodedDataEnrichmentStrategy implements AggregationStrategy {
 
-  public static void main(String[] args) {
-      SpringApplication.run(Application.class, args);
+  @Override
+  public Exchange aggregate(Exchange original, Exchange resource) {
+    AuditLog originalBody = original.getIn().getBody(AuditLog.class);
+    originalBody.setData(resource.getIn().getBody(String.class));
+    return original;
   }
 }

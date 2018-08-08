@@ -13,20 +13,9 @@
  */
 package org.apache.camel.examples;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
+import javax.ws.rs.ApplicationPath;
+import javax.ws.rs.core.Application;
 
-@Configuration
-@ConfigurationProperties(prefix = "api")
-public class ApiProperties {
-
-  private String basePath = "/camel";
-
-  public String getBasePath() {
-    return basePath;
-  }
-
-  public void setBasePath(String basePath) {
-    this.basePath = basePath;
-  }
+@ApplicationPath("/services")
+public class JAXRSActivator extends Application {
 }

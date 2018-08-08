@@ -26,10 +26,10 @@ import javax.persistence.Lob;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 @Entity
-@Table
+@Table(name = "audit_log")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AuditLog implements Serializable {
   

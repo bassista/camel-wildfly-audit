@@ -13,23 +13,19 @@
  */
 package org.apache.camel.examples;
 
-import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import org.apache.camel.ProducerTemplate;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Produces;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@Path("/audit")
-public class AuditService {
-  
-  @Inject
-  private ProducerTemplate producer;
+@ApplicationScoped
+public class JpaConfiguration {
 
-  @POST
-  @Consumes(MediaType.APPLICATION_JSON)
-  public Response postAudit(AuditLog auditLog) {
-    return producer.requestBody("direct:postAudit", auditLog, Response.class);
-  }
+  private static final Logger log = LoggerFactory.getLogger(JpaConfiguration.class);
+
+  @Produces
+  @PersistenceContext
+  private EntityManager em;
 }

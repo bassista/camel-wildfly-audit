@@ -13,17 +13,27 @@
  */
 package org.apache.camel.examples;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.time.Instant;
+import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
+import javax.inject.Named;
+import javax.xml.namespace.QName;
+import javax.xml.ws.Service;
 import org.apache.camel.CamelContext;
 import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.cdi.ContextName;
 import org.apache.camel.component.properties.PropertiesComponent;
+import org.apache.camel.model.dataformat.JsonLibrary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,7 +73,7 @@ public class CamelConfiguration extends RouteBuilder {
     overrideProperties.putAll(System.getProperties());
     properties.setOverrideProperties(overrideProperties);
   }
-
+  
   @Override
   public void configure() throws Exception {
     
@@ -85,10 +95,14 @@ public class CamelConfiguration extends RouteBuilder {
       .unmarshal().base64()
     ;
     
-    /*
-    from("quartz2:audit/daily_notification?cron={{camel.quartz.cron}}?&stateful=true")
-      .log(LoggingLevel.INFO, log, "Sending audit logs to notification service")
+    from("quartz2:audit/daily_notification?cron={{camel.quartz.cron}}&stateful=true")
+      .toF("jpa:org.apache.camel.examples.AuditLog?query=select o from org.apache.camel.examples.AuditLog o where o.createdTime between '%s' and '%s'", Instant.now().truncatedTo(ChronoUnit.DAYS), Instant.now().truncatedTo(ChronoUnit.DAYS).plus(Period.ofDays(1)))
+      .log(LoggingLevel.INFO, log, "Sending [${body.size()}] audit logs to notification service")
+      .marshal().json(JsonLibrary.Jackson)
+      .convertBodyTo(String.class)
+      .setHeader("NotificationRecipients").simple("${properties:notification.recipients}")
+      .setBody().groovy("new org.apache.camel.examples.NotificationRequest('recipients': request.headers['NotificationRecipients'].split(','), 'notification': request.body)")
+      .to("bean:notificationService?method=sendNotification(${body})")
     ;
-    */
   }
 }

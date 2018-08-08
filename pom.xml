@@ -171,23 +171,7 @@
                             <outputDirectory>deployments</outputDirectory>
                             <outputFileNameMapping>ROOT.war</outputFileNameMapping>
                           </dependencySet>
-                          <dependencySet>
-                            <includes>
-                              <include>mysql:mysql-connector-java</include>
-                            </includes>
-                            <fileMode>0664</fileMode>
-                            <directoryMode>0775</directoryMode>
-                            <outputDirectory>modules/org/mysql/main</outputDirectory>
-                          </dependencySet>
                         </dependencySets>
-                        <fileSet>
-                          <directory>src/main/wildfly/modules</directory>
-                          <includes>
-                            <include>**/*.xml</include>
-                          </includes>
-                          <filtered>true</filtered>
-                          <outputDirectory>modules</outputDirectory>
-                        </fileSet>
                       </inline>
                     </assembly>
                   </build>

@@ -16,12 +16,17 @@ package org.apache.camel.examples;
 import java.time.Instant;
 import java.time.Period;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import org.apache.camel.CamelContext;
 import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.cdi.ContextName;
+import org.apache.camel.component.properties.PropertiesComponent;
 import org.apache.camel.model.dataformat.JsonLibrary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +40,33 @@ public class CamelConfiguration extends RouteBuilder {
   @Inject
   @ContextName("camel-context")
   private CamelContext camelContext;
+  
+  @PostConstruct
+  private void initializePropertyPlaceholder() {
+    PropertiesComponent properties = camelContext.getComponent("properties", PropertiesComponent.class);
+
+    List<String> propertyLocations = new ArrayList<>();
+    propertyLocations.add("classpath:/application.properties;optional=true");
+    propertyLocations.add("file:${user.home}/application.properties;optional=true");
+    propertyLocations.add("file:${camel.config.location};optional=true");
+    if (System.getProperty("camel.config.locations") != null) {
+      for (String location : System.getProperty("camel.config.locations").split(",")) {
+        propertyLocations.add("file:" + location + ";optional=true");
+      }
+    }
+    propertyLocations.add("file:${env:CAMEL_CONFIG_LOCATION};optional=true");
+    if (System.getenv("CAMEL_CONFIG_LOCATIONS") != null) {
+      for (String location : System.getenv("CAMEL_CONFIG_LOCATIONS").split(",")) {
+        propertyLocations.add("file:" + location + ";optional=true");
+      }
+    }
+    properties.setLocations(propertyLocations);
+    
+    Properties overrideProperties = new Properties();
+    overrideProperties.putAll(System.getenv());
+    overrideProperties.putAll(System.getProperties());
+    properties.setOverrideProperties(overrideProperties);
+  }
   
   @Override
   public void configure() throws Exception {

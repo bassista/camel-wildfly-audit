@@ -8,4 +8,4 @@ data:
   application.properties: |-
     camel.quartz.cron=0/30+*+*+*+*+?
     notification.receipients=gcostanza@vandalayindustries.com,ckramer@handhbagels.com
-    notification.wsdl-url=http://camel-wildfly-notification.fuse.svc:8080/NotificationService?wsdl
+    notification.wsdl-url=http://camel-wildfly-notification-http.fuse.svc:8080/NotificationService?wsdl

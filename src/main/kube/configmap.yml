@@ -6,6 +6,6 @@ data:
   datasource.database: example
   datasource.url: "jdbc:mysql://192.168.99.1:3306/example?autoReconnect=true"
   application.properties: |-
-    camel.quartz.cron=0/30+*+*+*+*+?
+    camel.quartz.cron=0+0/30+*+*+*+?
     notification.receipients=gcostanza@vandalayindustries.com,ckramer@handhbagels.com
     notification.wsdl-url=http://camel-wildfly-notification-http.fuse.svc:8080/NotificationService?wsdl

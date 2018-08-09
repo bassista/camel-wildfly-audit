@@ -45,7 +45,7 @@ public class AuditLog implements Serializable {
   @Column(nullable = false)
   private String type;
   
-  @Column(nullable = false)
+  @Column(nullable = false, length = 1024)
   private String message;
   
   @Column(name = "raw_data", nullable = false)

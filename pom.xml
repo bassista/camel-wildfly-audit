@@ -23,7 +23,6 @@
     <wildfly-maven-plugin.version>1.2.2.Final</wildfly-maven-plugin.version>
 
     <fuse.version>7.0.1.fuse-000008-redhat-4</fuse.version>
-    <mysql.version>8.0.11</mysql.version>
   </properties>
 
   <dependencyManagement>
@@ -34,11 +33,6 @@
         <version>${fuse.version}</version>
         <type>pom</type>
         <scope>import</scope>
-      </dependency>
-      <dependency>
-        <groupId>mysql</groupId>
-        <artifactId>mysql-connector-java</artifactId>
-        <version>${mysql.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -90,11 +84,6 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>mysql</groupId>
-      <artifactId>mysql-connector-java</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
       <groupId>org.apache.camel</groupId>
       <artifactId>camel-groovy</artifactId>
       <scope>provided</scope>
@@ -102,6 +91,11 @@
     <dependency>
       <groupId>org.apache.camel</groupId>
       <artifactId>camel-quartz2</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.camel</groupId>
+      <artifactId>camel-base64</artifactId>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -192,6 +186,5 @@
       </build>
     </profile>
   </profiles>
-  
 
 </project>
